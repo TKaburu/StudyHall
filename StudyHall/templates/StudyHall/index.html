@@ -1,0 +1,55 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Hall</title>
+    <!-- css link -->
+    <link rel="stylesheet" href="{% static '/styles/main.css' %}">
+    <!-- Font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Poppin font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    
+    <section class="nav-container">
+        <nav class="nav-bar">
+            <div class="logo"><a href="{% url 'home' %}">Study <span><strong>Hall</strong> </span> </a></div>
+            
+            <ul class="home-links">
+                <a href="#">Home</a>
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+            </ul>
+            <div class="user-auth">
+                <!-- <i class="fa-regular fa-user"></i> -->
+                {% if request.user.is_authenticated %}
+                    <!-- <p>Hello {{request.user}}</p> -->
+                    <a href="{% url 'logout' %}">
+                        <img src="{% static 'images/avatar.svg' %}" />
+                        <p>Logout</p>
+                    </a>
+
+                    {% else %}
+                    <a href="{% url 'login' %}">Login</a>
+
+                 {% endif %}
+            </div>
+        </nav>
+    </section>
+    <div class="content-container">
+        {% block content %} {% endblock %}
+    </div>
+    <!-- Footer -->
+    <footer>
+        Made with Love by <strong>Tracey Kaburu</strong>
+    </footer>
+</body>
+</html>

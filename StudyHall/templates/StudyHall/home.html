@@ -1,0 +1,23 @@
+{% extends 'StudyHall/index.html' %}
+
+{% block content %}
+<div>
+    <a href="{% url 'create-room' %}">Create a Room</a> <br>
+    <small>There are <b> {{room_count}} </b> rooms available </small>
+    {% for room in rooms %}
+    <div>
+        
+        <span> Host @{{room.host.username}}</span>
+        <h4> <a href="{% url 'room' room.title %}">{{room.title}}</a>  </h4>
+        <h5> {{room.description}} </h5>
+        <a href="{% url 'update-room' room_title=room.title %}">Edit</a>
+        <small>{{ room.topic.name }}</small>
+    {% empty %}
+    <p>
+        No rooms available
+    </p>
+    </div>
+    
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'StudyHall/index.html' %}
+
+{% block content %}
+<div class="new-room">
+    <h3>You are updtating {{room.title}} </h3>
+    <form method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+
+        <button type="submit">Update</button>
+    </form>
+
+</div>
+{% endblock %}

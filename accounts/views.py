@@ -11,6 +11,9 @@ from .forms import RegisterForm
 # Create your views here.
 
 class UserRegister(CreateView):
+    """
+    This class enables new users to register
+    """
     form_class = RegisterForm
     template_name = 'accounts/register.html'
     success_url = reverse_lazy('login')
@@ -24,15 +27,19 @@ class UserRegister(CreateView):
         return super().form_valid(form)
 
 class UserLogin(LoginView):
+    """
+    This class enables login functionality
+    """
     template_name = 'accounts/login.html'
     fields = '__all__'
     redirect_authenticated_user = True
+    # success_url = reverse_lazy('home')
 
     def get_success_url(self):
         return reverse_lazy('home')
     
     def form_valid(self, form):
-        messages.success(self.request, 'You have been logged in successfully.')
+        messages.success(self.request, 'You have been logged in successfully.') 
         return super().form_valid(form)
 
     def form_invalid(self, form):
@@ -40,6 +47,9 @@ class UserLogin(LoginView):
         return super().form_invalid(form)
 
 class UserLogout(RedirectView):
+    """
+    This class enables logout functionality
+    """
     url = '/login' # where the user is redirected to after logged out
 
     def get(self, request, *args, **kwargs):
