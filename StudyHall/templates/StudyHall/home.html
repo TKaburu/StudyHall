@@ -11,6 +11,7 @@
         <h4> <a href="{% url 'room' room.title %}">{{room.title}}</a>  </h4>
         <h5> {{room.description}} </h5>
         <a href="{% url 'update-room' room_title=room.title %}">Edit</a>
+        <a href="{% url 'delete-room' room_title=room.title %}">Delete</a>
         <small>{{ room.topic.name }}</small>
     {% empty %}
     <p>

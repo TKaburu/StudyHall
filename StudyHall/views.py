@@ -63,3 +63,12 @@ class UpdateRoom(UpdateView):
     def get_object(self, queryset=None):
         room_title = self.kwargs['room_title']
         return Room.objects.get(title=room_title)
+    
+class DeleteRoom(DeleteView):
+    model = Room
+    template_name = 'studyHall/delete.html'
+    success_url = reverse_lazy('home')
+
+    def get_object(self, queryset=None):
+        room_title = self.kwargs['room_title']
+        return Room.objects.get(title=room_title)
