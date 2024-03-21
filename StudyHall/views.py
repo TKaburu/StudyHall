@@ -1,5 +1,6 @@
-# from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Q
+from django.contrib.auth.models import User
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q, Count
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DeleteView
@@ -41,8 +42,8 @@ class HomeView(ListView):
         context['topics'] = Topics.objects.all() # get all the topics
 
         # calculate the top 10 hosts by no of rooms created
-        top_host = 
-
+        top_hosts = User.objects.annotate(num_rooms=Count('room')).order_by('-num_rooms')[:5]
+        context['top_hosts'] = top_hosts
         return context  
 
 
@@ -60,13 +61,14 @@ class RoomView(DetailView):
      
 
 # CRUD operations
-class CreateRoom(CreateView):
+class CreateRoom(LoginRequiredMixin, CreateView):
     """
     This class view creates a new room based on the Room model
     """
     model = Room
     fields = ['title', 'host', 'description', 'topic']
     template_name = 'StudyHall/create-room.html'
+    login_url = reverse_lazy('login') # if user is not logged in they are redirected here
     success_url = reverse_lazy('home')
 
     def form_valid(self, form):
