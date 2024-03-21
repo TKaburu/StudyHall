@@ -25,6 +25,10 @@ class UserRegister(CreateView):
             login(self.request, user)
 
         return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        messages.error(self.request, 'Please correct the errors below.')
+        return super().form_invalid(form)
 
 class UserLogin(LoginView):
     """
@@ -60,3 +64,4 @@ class UserLogout(RedirectView):
         messages.success(request, 'You are now logged out')
         return super(UserLogout, self).get(request, *args, **kwargs)
 
+# class UserProfile()
