@@ -41,7 +41,7 @@ class HomeView(ListView):
         context['room_count'] = Room.objects.count() # Calculate how many rooms ther are 
         context['topics'] = Topics.objects.all() # get all the topics
 
-        # calculate the top 10 hosts by no of rooms created
+        # calculate the top 5 hosts by no of rooms created
         top_hosts = User.objects.annotate(num_rooms=Count('room')).order_by('-num_rooms')[:5]
         context['top_hosts'] = top_hosts
         return context  
