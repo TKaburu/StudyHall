@@ -37,6 +37,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'StudyHall.apps.StudyhallConfig',
     'accounts.apps.AccountsConfig',
+    'tasks.apps.TasksConfig',
 
     'django.contrib.admin',
     'django.contrib.auth',
