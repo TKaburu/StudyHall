@@ -11,14 +11,14 @@
 
         <!-- Display top hosts -->
         <h3>Top Hosts</h3>
-        <hr>
+
         {% for host in top_hosts %}
         <div>{{ host.username }} ({{ host.num_rooms }} rooms)</div>
         {% endfor %}
 
         <!-- Display Topics -->
         <h3>Topics</h3>
-        <hr>
+
         <a href="{% url 'home' %}"> All </a>
         {% for topic in topics %}
             <div>
