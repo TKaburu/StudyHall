@@ -55,3 +55,9 @@ li {
     justify-content: space-between;
     /* margin: 10px; */
 }
+
+/* Home view */
+.home-view {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+}

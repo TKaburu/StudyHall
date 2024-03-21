@@ -1,10 +1,11 @@
 # from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from .models import Room
+from .models import Room, Topics
 
 # Create your views here.
 
@@ -16,10 +17,32 @@ class HomeView(ListView):
     model = Room
     template_name = 'StudyHall/home.html'
     context_object_name = 'rooms'
-
+    
+    def get_queryset(self):
+        """
+        Search functionality for the rooms.
+        Feat:
+            Search by name, description and host
+        """
+        query = self.request.GET.get('q')
+        if query:
+            return Room.objects.filter(
+                Q(title__icontains=query) |
+                Q(description__icontains=query) |
+                Q(host__username__icontains=query) |
+                Q(topic__name__icontains=query)
+            )
+        else:
+            return Room.objects.all()
+        
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['room_count'] = Room.objects.count()
+        context['room_count'] = Room.objects.count() # Calculate how many rooms ther are 
+        context['topics'] = Topics.objects.all() # get all the topics
+
+        # calculate the top 10 hosts by no of rooms created
+        top_host = 
+
         return context  
 
 
