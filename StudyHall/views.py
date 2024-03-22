@@ -34,7 +34,7 @@ class HomeView(ListView):
                 Q(topic__name__icontains=query)
             )
         else:
-            return Room.objects.all()
+            return Room.objects.all().order_by('-updated_on', '-created_on')
         
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -45,7 +45,6 @@ class HomeView(ListView):
         top_hosts = User.objects.annotate(num_rooms=Count('room')).order_by('-num_rooms')[:5]
         context['top_hosts'] = top_hosts
         return context  
-
 
 class RoomView(DetailView):
     """
@@ -79,21 +78,24 @@ class CreateRoom(LoginRequiredMixin, CreateView):
 
         return super().form_valid(form)
 
-class UpdateRoom(UpdateView):
+class UpdateRoom(LoginRequiredMixin, UpdateView):
     model = Room
     fields = ['title', 'host', 'description', 'topic']
     template_name = 'studyHall/update-room.html'
+    login_url = reverse_lazy('login')
     success_url = reverse_lazy('home')
 
     def get_object(self, queryset=None):
         room_title = self.kwargs['room_title']
         return Room.objects.get(title=room_title)
     
-class DeleteRoom(DeleteView):
+class DeleteRoom(LoginRequiredMixin, DeleteView):
     model = Room
     template_name = 'studyHall/delete.html'
+    login_url = reverse_lazy('login')
     success_url = reverse_lazy('home')
 
     def get_object(self, queryset=None):
         room_title = self.kwargs['room_title']
         return Room.objects.get(title=room_title)
+
