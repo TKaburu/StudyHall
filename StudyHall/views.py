@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from .models import Room, Topics
+from .models import Room, Topics, RoomChats
 
 # Create your views here.
 
@@ -54,8 +54,17 @@ class RoomView(DetailView):
     This class is responsible for the detailed view of a room
     """
     model = Room
-    template_name = 'StudyHall/room.html'
+    template_name = 'StudyHall/room-detail.html'
     context_object_name = 'room'
+
+    def get_context_data(self, **kwargs):
+        """
+        Gets room messages
+        """
+        context = super().get_context_data(**kwargs)
+        context['room_chats'] = RoomChats.objects.all()
+        return context
+
 
     def get_object(self, queryset=None):
         """
@@ -102,7 +111,7 @@ class UpdateRoom(LoginRequiredMixin, UpdateView):
         return Room.objects.get(title=room_title)
     
 class DeleteRoom(LoginRequiredMixin, DeleteView):
-     """
+    """
     This class enables logged in users to delete a room
     """
     model = Room
