@@ -37,6 +37,9 @@ class HomeView(ListView):
             return Room.objects.all().order_by('-updated_on', '-created_on')
         
     def get_context_data(self, **kwargs):
+        """
+        Gets different data such as room count, topics, messages etc
+        """
         context = super().get_context_data(**kwargs)
         context['room_count'] = Room.objects.count() # Calculate how many rooms ther are 
         context['topics'] = Topics.objects.all() # get all the topics
@@ -55,6 +58,9 @@ class RoomView(DetailView):
     context_object_name = 'room'
 
     def get_object(self, queryset=None):
+        """
+        Gets the name/title of the room
+        """
         room_title = self.kwargs['room_title']
         return Room.objects.get(title=room_title)
      
@@ -68,7 +74,7 @@ class CreateRoom(LoginRequiredMixin, CreateView):
     fields = ['title', 'host', 'description', 'topic']
     template_name = 'StudyHall/create-room.html'
     login_url = reverse_lazy('login') # if user is not logged in they are redirected here
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('home') # if user is logged in they are redirected here
 
     def form_valid(self, form):
         """
@@ -79,6 +85,9 @@ class CreateRoom(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 class UpdateRoom(LoginRequiredMixin, UpdateView):
+    """
+    This class enables logged in users to edit a room
+    """
     model = Room
     fields = ['title', 'host', 'description', 'topic']
     template_name = 'studyHall/update-room.html'
@@ -86,16 +95,25 @@ class UpdateRoom(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('home')
 
     def get_object(self, queryset=None):
+        """
+        Gets the name/title of the room
+        """
         room_title = self.kwargs['room_title']
         return Room.objects.get(title=room_title)
     
 class DeleteRoom(LoginRequiredMixin, DeleteView):
+     """
+    This class enables logged in users to delete a room
+    """
     model = Room
     template_name = 'studyHall/delete.html'
     login_url = reverse_lazy('login')
     success_url = reverse_lazy('home')
 
     def get_object(self, queryset=None):
+        """
+        Gets the name/title of the room
+        """
         room_title = self.kwargs['room_title']
         return Room.objects.get(title=room_title)
 
