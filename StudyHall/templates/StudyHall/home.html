@@ -44,8 +44,13 @@
             <span> Host @{{room.host.username}}</span>
             <h4> <a href="{% url 'room' room.title %}">{{room.title}}</a>  </h4>
             <h5> {{room.description}} </h5>
-            <a href="{% url 'update-room' room_title=room.title %}">Edit</a>
-            <a href="{% url 'delete-room' room_title=room.title %}">Delete</a>
+            <!-- restricted to only the host -->
+            {% if request.user.is_authenticated %}
+                {% if request.user == room.host or request.user %}
+                    <a href="{% url 'update-room' room_title=room.title %}">Edit</a>
+                    <a href="{% url 'delete-room' room_title=room.title %}">Delete</a>
+                {% endif %}
+            {% endif %}
             <small>{{ room.topic.name }}</small>
             
         {% empty %}
