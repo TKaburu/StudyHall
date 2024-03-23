@@ -1,0 +1,56 @@
+{% extends 'StudyHall/index.html' %}
+{% load static %}
+
+{% block css %} 
+<link rel="stylesheet" href="{% static 'styles/room.css' %}">
+{% endblock %}
+
+{% block content %} 
+<div class="room-container">
+    <div class="chat-room">
+        <div class="room-title">
+            <h3> Welcome to <b>{{ room.title }}</b></h3>
+            <p class="room-description"> {{room.description}} </p>
+            <!-- Date format is like March 19, 2024 -->
+            <small>Created on {{room.created_on |date:'F j, Y'}}</small> 
+        </div>
+    
+        <div class="room-messages">
+            {% for chat in room_chats %}
+                <div>
+                    <p>@{{ chat.sender.username }} {{chat.sent_on | timesince}} ago</p>
+                    <p>{{ chat.body }}</p>
+                    <hr>
+    
+                </div>
+            {% empty %}
+            <p>No Chats Yet...</p>
+            {% endfor %}
+        </div>
+    
+        <div class="message-form">
+            {% csrf_token %}
+            <form method="post" action="">
+                <textarea name="body" id="" cols="100" rows="10" placeholder="Chat with the room..."></textarea>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    
+    </div>
+    <!-- Get the members of a particular room -->
+    <div class="members">
+        <h1>Members</h1>
+
+        {% for member in room.members.all %}
+            <div>
+                <h4> @{{member.username}} </h4>
+            </div>
+        {% endfor %}
+    </div>
+    
+    
+
+
+</div>
+
+{% endblock %}
