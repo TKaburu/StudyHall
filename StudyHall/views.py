@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q, Count
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
@@ -62,7 +62,10 @@ class RoomView(DetailView):
         Gets room messages
         """
         context = super().get_context_data(**kwargs)
-        context['room_chats'] = RoomChats.objects.all()
+        room =  self.get_object() # gets a particular room 
+        context['room_chats'] = RoomChats.objects.filter(room=room).order_by('sent_on') # gets the messages for the particular room
+        context['members'] = Room.members.all()
+        # context['form'] = self.get_form()
         return context
 
 
@@ -71,7 +74,19 @@ class RoomView(DetailView):
         Gets the name/title of the room
         """
         room_title = self.kwargs['room_title']
-        return Room.objects.get(title=room_title)
+        return get_object_or_404(Room, title=room_title) # if room not found return 404
+    
+    def post(self, request, *args, **kwargs):
+        room = self.get_object()
+        if request.method == 'POST':
+            RoomChats.objects.create (
+                room=room, sender=request.user, body=request.pos.get('body')
+            )
+        return self.get(request, *args, **kwargs)
+        # body = request.POST.get('body')
+        # if body:
+        #     RoomChats.objects.create(room=room, sender=request.user, body=body)
+        # return self.get(request, *args, **kwargs)
      
 
 # CRUD operations
