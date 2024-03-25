@@ -10,3 +10,6 @@ class Tasks(models.Model):
     due_date = models.DateField()
     created_on = models.DateTimeField(auto_now_add=True)
     complete = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title
