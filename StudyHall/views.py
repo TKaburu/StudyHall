@@ -7,6 +7,7 @@ from django.views.generic import CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from .models import Room, Topics, RoomChats
+from tasks.models import Tasks
 
 # Create your views here.
 
@@ -47,6 +48,12 @@ class HomeView(ListView):
         # calculate the top 5 hosts by no of rooms created
         top_hosts = User.objects.annotate(num_rooms=Count('room')).order_by('-num_rooms')[:5]
         context['top_hosts'] = top_hosts
+        if self.request.user.is_authenticated:
+            context['tasks'] = Tasks.objects.filter(user=self.request.user) # Tasks for the current user
+        else:
+            context['tasks'] = None
+
+
         return context  
 
 class RoomView(DetailView):

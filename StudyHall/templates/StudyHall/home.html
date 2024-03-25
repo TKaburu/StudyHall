@@ -46,7 +46,7 @@
             <h5> {{room.description}} </h5>
             <!-- restricted to only the host -->
             {% if request.user.is_authenticated %}
-                {% if request.user == room.host or request.user %}
+                {% if request.user == room.host%}
                     <a href="{% url 'update-room' room_title=room.title %}">Edit</a>
                     <a href="{% url 'delete-room' room_title=room.title %}">Delete</a>
                 {% endif %}
@@ -61,6 +61,24 @@
         
         {% endfor %}
     </div> 
+
+    <div class="recent-activities">
+        <h3>Recent Activities</h3>
+    </div>
+
+    <div class="tasks-container">
+        <h3> <a href="{% url 'tasks' %}">Tasks</a></h3>
+        {% if user.is_authenticated %}
+            {% for task in tasks %}
+                <div class="tasks">
+                    {{task.title}}
+                    {{task.due_date}}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Please <a href="{% url 'login' %}">log in</a> to view your tasks.</p>
+        {% endif %}
+    </div>
 
     <div class="buddy-chats">
         <h3>Buddy Chats</h3>

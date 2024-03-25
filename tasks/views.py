@@ -13,12 +13,13 @@ from .forms import TaskForm
 # Create your views here.
 
 
-class TasksView(ListView):
+class TasksView(LoginRequiredMixin, ListView):
     """
     This class is responsible for the task dashboard view
     """
     model = Tasks
     template_name = 'tasks/task-dashboard.html'
+    login_url = reverse_lazy('login')
 
     def get_context_data(self, **kwargs):
         """
