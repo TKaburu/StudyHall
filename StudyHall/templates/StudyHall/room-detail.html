@@ -29,8 +29,9 @@
         </div>
     
         <div class="message-form">
-            {% csrf_token %}
+            
             <form method="post" action="">
+                {% csrf_token %}
                 <textarea name="body" id="" cols="100" rows="10" placeholder="Chat with the room..."></textarea>
                 <button type="submit">Send</button>
             </form>
