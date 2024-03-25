@@ -1,10 +1,12 @@
 from django import forms
-from django.shortcuts import render
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic.list import ListView
 from django.views.generic import CreateView, UpdateView, DeleteView
 # from .forms import TaskForm
 from .models import Tasks
+from .forms import TaskForm
 
 
 
@@ -20,32 +22,22 @@ class TasksView(ListView):
 
     def get_context_data(self, **kwargs):
         """
-        This method filters tasks to a particular signed in user
+        This method adds additional data
         """
-        contex = super().get_context_data(**kwargs)
-        contex['tasks'] = contex['tasks'].filter(user=self.request.user)
-        contex['count'] = contex['tasks'].filter(complete=False).count()
-        return contex
+        context = super().get_context_data(**kwargs)
+        tasks = context['object_list'].filter(user=self.request.user) # gets the tasks for specific logged in user
+        context['tasks'] = tasks
+        context['count'] = tasks.filter(complete=False).count() # Counts the number of incomplete tasks
+        return context
 
-class NewTask(CreateView):
+class CreateTask(LoginRequiredMixin, CreateView):
     """
-    This class is responsible for creating new tasks
+    This class is responsible for creating new tasks for logged in users
     """
-    model = Tasks
+    form_class = TaskForm
     template_name = 'tasks/create-task.html'
-    fields = ['task', 'description', 'due_date', 'complete']
-    widgets = {
-            'due_date': forms.DateInput(attrs={'type': 'date'})
-        }
+    login_url = reverse_lazy('login') 
     success_url = reverse_lazy('tasks')
-
-    # def get_form_kwargs(self):
-    #     """
-    #     Pass the user instance to the form when it is instantiated
-    #     """
-    #     kwargs = super().get_form_kwargs()
-    #     kwargs['user'] = self.request.user
-    #     return kwargs
 
     def form_valid(self, form):
         """"
@@ -53,4 +45,45 @@ class NewTask(CreateView):
         """
         form.instance.user = self.request.user
 
-        return super(NewTask, self).form_valid(form)
+        return super(CreateTask, self).form_valid(form)
+
+class UpdateTask(LoginRequiredMixin, UpdateView):
+    """
+    This class is responsible for updating tasks for logged in users
+    """
+    form_class = TaskForm
+    template_name = 'tasks/update-task.html'
+    login_url = reverse_lazy('login') 
+    success_url = reverse_lazy('tasks')
+
+    def get_queryset(self):
+        """
+        Returns the queryset for this view
+        """
+        pk = self.kwargs.get('pk')
+        return Tasks.objects.filter(pk=pk)
+
+    def get_context_data(self, **kwargs):
+        """
+        Gets task title to pass to update.html
+        """
+        context = super().get_context_data(**kwargs)
+        context['task'] = self.get_object().title 
+        return context
+
+class DeleteTask(LoginRequiredMixin, DeleteView):
+    """
+    This class enables logged in users to delete a task
+    """
+    model = Tasks
+    template_name = 'studyHall/delete.html'
+    login_url = reverse_lazy('login')
+    success_url = reverse_lazy('tasks')
+
+    def get_context_data(self, **kwargs):
+        """
+        Adds adds data contex for the object being deleted
+        """
+        context = super().get_context_data(**kwargs)
+        context['obj'] = self.get_object().title  # obj since delete is dynamic it can delete anything: rooms, tasks, messages etc
+        return context
