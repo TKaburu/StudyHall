@@ -2,13 +2,13 @@
 
 {% block content %}
 
-<div class="new-task">
-    <h2>Add a New Task</h2>
+<div>
+    <h2>Updating "{{task.title}}" </h2>
     <form method="post">
         {% csrf_token %}
         {{form.as_p}}
 
-        <button type="submit">Create Task</button>
+        <button type="submit">Update Task</button>
     </form>
 
 </div>
