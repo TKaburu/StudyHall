@@ -26,14 +26,6 @@
             </div>
         {% endfor %}
     </div>
-    <!-- Search bar -->
-    <!-- <div class="search-bar">
-        <form method="GET" action="{% url 'home' %}">
-            <input type="text" name="q" placeholder="Search...">
-            <button type="submit">Search</button>
-        </form>
-    </div> -->
-    
     
     <div class="room-container">
        
@@ -62,26 +54,29 @@
         {% endfor %}
     </div> 
 
-    <div class="recent-activities">
-        <h3>Recent Activities</h3>
+    <div class="tasks-chats">
+        <div class="recent-activities">
+            <h3>Recent Activities</h3>
+        </div>
+    
+        <div class="tasks-container">
+            <h3> <a href="{% url 'tasks' %}">Tasks</a></h3>
+            {% if user.is_authenticated %}
+                {% for task in tasks %}
+                    <div class="tasks">
+                        {{task.title}}
+                        {{task.due_date}}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>Please <a href="{% url 'login' %}">log in</a> to view your tasks.</p>
+            {% endif %}
+        </div>
+    
+        <div class="buddy-chats">
+            <h3>Buddy Chats</h3>
+        </div>
     </div>
-
-    <div class="tasks-container">
-        <h3> <a href="{% url 'tasks' %}">Tasks</a></h3>
-        {% if user.is_authenticated %}
-            {% for task in tasks %}
-                <div class="tasks">
-                    {{task.title}}
-                    {{task.due_date}}
-                </div>
-            {% endfor %}
-        {% else %}
-            <p>Please <a href="{% url 'login' %}">log in</a> to view your tasks.</p>
-        {% endif %}
-    </div>
-
-    <div class="buddy-chats">
-        <h3>Buddy Chats</h3>
-    </div>
+    
 </div>
 {% endblock %}

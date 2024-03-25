@@ -87,7 +87,7 @@ class RoomView(DetailView):
         room = self.get_object()
         if request.method == 'POST':
             RoomChats.objects.create (
-                room=room, sender=request.user, body=request.pos.get('body')
+                room=room, sender=request.user, body=request.POST.get('body')
             )
         return self.get(request, *args, **kwargs)
         # body = request.POST.get('body')
