@@ -13,6 +13,7 @@ class Room(models.Model):
     description = models.TextField(null=True, blank=True)
     topic = models.ForeignKey('Topics', on_delete=models.SET_NULL, null=True)
     room_chats = models.ManyToManyField('RoomChats', related_name='room_chats', blank=True)
+    resource = models.ManyToManyField('Resources', related_name='resources')
     members = models.ManyToManyField(User, related_name='members', blank=True)
     updated_on = models.DateTimeField(auto_now=True) # Every time there is activity in the room
     created_on = models.DateTimeField(auto_now_add=True)
@@ -56,15 +57,15 @@ class RoomChats(models.Model):
     def __str__(self):
         return f"Comment by {self.sender.username} on {self.room.title}"
     
-# class Resources(models.Model):
-#     """
-#     This class defines a resource (e.g., link, PDF, video, picture) uploaded by a user in a room
-#     """
-#     room = models.ForeignKey(Room, on_delete=models.CASCADE)
-#     sender = models.ForeignKey(User, on_delete=models.CASCADE)
-#     title = models.CharField(max_length=255)
-#     file = models.FileField(upload_to='resources/')
-#     created_on = models.DateTimeField(auto_now_add=True)
+class Resources(models.Model):
+    """
+    This class defines a resource (e.g., link, PDF, video, picture) uploaded by a user in a room
+    """
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)
+    sender = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    file = models.FileField(upload_to='resources/')
+    created_on = models.DateTimeField(auto_now_add=True)
 
-#     def __str__(self):
-#         return self.title
+    def __str__(self):
+        return self.title
