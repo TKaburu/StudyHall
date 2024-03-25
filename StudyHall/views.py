@@ -59,12 +59,12 @@ class RoomView(DetailView):
 
     def get_context_data(self, **kwargs):
         """
-        Gets room messages
+        Gets additional data
         """
         context = super().get_context_data(**kwargs)
         room =  self.get_object() # gets a particular room 
         context['room_chats'] = RoomChats.objects.filter(room=room).order_by('sent_on') # gets the messages for the particular room
-        context['members'] = Room.members.all()
+        context['members'] = room.members.all()
         # context['form'] = self.get_form()
         return context
 
@@ -141,3 +141,10 @@ class DeleteRoom(LoginRequiredMixin, DeleteView):
         room_title = self.kwargs['room_title']
         return Room.objects.get(title=room_title)
 
+    def get_context_data(self, **kwargs):
+        """
+        Adds the room title to the context
+        """
+        context = super().get_context_data(**kwargs)
+        context['obj'] = self.get_object().title  # obj since delete is dynamic it can delete anything: rooms, tasks, messages etc
+        return context
