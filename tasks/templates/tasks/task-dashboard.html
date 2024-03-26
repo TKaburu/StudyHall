@@ -3,16 +3,22 @@
 {% block content %}
 
 <a href="{% url 'create-task' %}">Add a Task</a>
+ <!-- search bar -->
+ <form class="search-bar method="GET" action="{% url 'tasks' %}">
+    <input type="text" name="q" placeholder="Search...">
+    <button type="submit">Search</button>
+</form>
 
 {% for task in tasks %}
     <div>
+       
         <h3> <a href="{% url 'update-task'  task.id %}">{{task.title}}</a></h3> 
         {{task.description}}
         <small>{{task.due_date}}</small> 
         <a href="{% url 'delete-task' task.id %}">Delete</a>
         <form method="post" action="">
             {% csrf_token %}
-            <input type="checkbox" name="complete" {% if task.complete %}checked{% endif %}>
+            <input type="checkbox" name="complete" {% if task.complete %}checked{% endif %}> 
             <label for="complete">Complete</label>
             <!-- <button type="submit">Update</button> -->
     </div>

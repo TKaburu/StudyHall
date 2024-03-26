@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic.list import ListView
@@ -20,6 +21,21 @@ class TasksView(LoginRequiredMixin, ListView):
     model = Tasks
     template_name = 'tasks/task-dashboard.html'
     login_url = reverse_lazy('login')
+
+    def get_queryset(self):
+        """
+        Search functionality for tasks.
+        Feat:
+            Search by name, description and host
+        """
+        query = self.request.GET.get('q')
+        if query:
+            return Tasks.objects.filter(
+                Q(title__icontains=query) |
+                Q(description__icontains=query)
+            )
+        else:
+            return Tasks.objects.all().order_by('-due_date')
 
     def get_context_data(self, **kwargs):
         """
