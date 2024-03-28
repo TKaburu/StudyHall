@@ -1,11 +1,14 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q, Count
-from django.shortcuts import render, get_object_or_404
+from django.http import Http404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import FormView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
+# from .forms import UploadResourceForm
 from .models import Room, Topics, RoomChats
 from tasks.models import Tasks
 
@@ -44,6 +47,7 @@ class HomeView(ListView):
         context = super().get_context_data(**kwargs)
         context['room_count'] = Room.objects.count() # Calculate how many rooms ther are 
         context['topics'] = Topics.objects.all() # get all the topics
+        context['room_chats'] = RoomChats.objects.all()
 
         # calculate the top 5 hosts by no of rooms created
         top_hosts = User.objects.annotate(num_rooms=Count('room')).order_by('-num_rooms')[:5]
@@ -72,16 +76,9 @@ class RoomView(DetailView):
         room =  self.get_object() # gets a particular room 
         context['room_chats'] = RoomChats.objects.filter(room=room).order_by('sent_on') # gets the messages for the particular room
         context['members'] = room.members.all()
+        # context['resource'] = room.resource.all()
         # context['form'] = self.get_form()
         return context
-
-
-    def get_object(self, queryset=None):
-        """
-        Gets the name/title of the room
-        """
-        room_title = self.kwargs['room_title']
-        return get_object_or_404(Room, title=room_title) # if room not found return 404
     
     def post(self, request, *args, **kwargs):
         room = self.get_object()
@@ -89,11 +86,8 @@ class RoomView(DetailView):
             RoomChats.objects.create (
                 room=room, sender=request.user, body=request.POST.get('body')
             )
+            room.members.add(request.user)
         return self.get(request, *args, **kwargs)
-        # body = request.POST.get('body')
-        # if body:
-        #     RoomChats.objects.create(room=room, sender=request.user, body=body)
-        # return self.get(request, *args, **kwargs)
      
 
 # CRUD operations
@@ -125,12 +119,12 @@ class UpdateRoom(LoginRequiredMixin, UpdateView):
     login_url = reverse_lazy('login')
     success_url = reverse_lazy('home')
 
-    def get_object(self, queryset=None):
-        """
-        Gets the name/title of the room
-        """
-        room_title = self.kwargs['room_title']
-        return Room.objects.get(title=room_title)
+    # def get_object(self, queryset=None):
+    #     """
+    #     Gets the name/title of the room
+    #     """
+    #     room_title = self.kwargs['room_title']
+    #     return Room.objects.get(title=room_title)
     
 class DeleteRoom(LoginRequiredMixin, DeleteView):
     """
@@ -141,12 +135,24 @@ class DeleteRoom(LoginRequiredMixin, DeleteView):
     login_url = reverse_lazy('login')
     success_url = reverse_lazy('home')
 
-    def get_object(self, queryset=None):
-        """
-        Gets the name/title of the room
-        """
-        room_title = self.kwargs['room_title']
-        return Room.objects.get(title=room_title)
+    # def get_object(self, queryset=None):
+    #     """
+    #     Gets the room object based on the provided pk
+    #     """
+    #     obj = super().get_object(queryset=queryset)
+    #     if obj is None:
+    #         raise Http404("Room does not exist")
+    #     return obj
+
+    def delete(self, request, *args, **kwargs):
+        # Get the room object
+        room = self.get_object()
+        
+        # Delete the associated room chats
+        room.room_chats.all().delete()
+        
+        # Delete the room
+        return super().delete(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         """
@@ -155,3 +161,51 @@ class DeleteRoom(LoginRequiredMixin, DeleteView):
         context = super().get_context_data(**kwargs)
         context['obj'] = self.get_object().title  # obj since delete is dynamic it can delete anything: rooms, tasks, messages etc
         return context
+
+
+# class UploadResource(FormView):
+#     template_name = 'upload_resource.html'
+#     form_class = UploadResourceForm
+
+#     def form_valid(self, form):
+#         room_id = self.kwargs['room_id']
+#         room = Room.objects.get(id=room_id)
+#         resource = form.save(commit=False)
+#         resource.room = room
+#         resource.sender = self.request.user
+#         resource.save()
+#         return redirect('room', room_id=room_id)
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['room_id'] = self.kwargs['room_id']
+#         return context
+
+class DeleteMessage(LoginRequiredMixin, DeleteView):
+    """
+    This class enables logged in users to delete their room messages
+    """
+    model = RoomChats
+    template_name = 'studyHall/delete.html'
+    login_url = reverse_lazy('login')
+    # success_url = reverse_lazy('room')
+
+    def get_success_url(self):
+        """
+        This method gets the primary key of the room to redirect to after 
+        message is deleted
+        """
+        room_pk = self.object.room.pk  
+        return reverse_lazy('room', kwargs={'pk': room_pk})
+
+    def get_context_data(self, **kwargs):
+        """
+        Adds the room title to the context
+        """
+        context = super().get_context_data(**kwargs)
+        context['obj'] = self.get_object()  # obj since delete is dynamic it can delete anything: rooms, tasks, messages etc
+        return context
+
+
+
+   

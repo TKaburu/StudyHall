@@ -1,16 +1,20 @@
 {% extends 'StudyHall/index.html' %}
 
 {% block content %}
+<div class="account-auth">
 
-<h1>Login</h1>
+    <form method="post">
+        <h1 class="auth-title">Login</h1>
+        {% csrf_token %}
+        {{form.as_p}}
 
-<form method="post">
-    {% csrf_token %}
-    {{form.as_p}}
+        <button type="submit">Login</button>
+        <p class="auth-par">Don't have an account? <a href="{% url 'register' %}">Register</a> </p>
+    </form>
+    
 
-    <button type="submit">Login</button>
-</form>
+</div>
 
-<p>Don't have an account? <a href="{% url 'register' %}">Register</a> </p>
+
 
 {% endblock %}

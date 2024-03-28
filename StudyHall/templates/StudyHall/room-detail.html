@@ -20,6 +20,9 @@
                 <div>
                     <p>@{{ chat.sender.username }} {{chat.sent_on | timesince}} ago</p>
                     <p>{{ chat.body }}</p>
+                    {% if request.user == chat.sender %}
+                       <button type="submit"><a href="{% url 'delete-message' chat.id %}">Delete</a></button> 
+                    {% endif %}
                     <hr>
     
                 </div>
@@ -27,7 +30,6 @@
             <p>No Chats Yet...</p>
             {% endfor %}
         </div>
-    
         <div class="message-form">
             
             <form method="post" action="">
@@ -44,7 +46,8 @@
 
         {% for member in room.members.all %}
             <div>
-                <h4> @{{member.username}} </h4>
+                <h4>{{member.first_name}} {{member.last_name}} </h4>
+                <small>@{{member.username}}</small>
             </div>
         {% endfor %}
     </div>

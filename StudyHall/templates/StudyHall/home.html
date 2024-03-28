@@ -1,24 +1,20 @@
 {% extends 'StudyHall/index.html' %}
 
 {% block content %}
-<div class="home-view">
+<div class="home-container">
     <div class="topics-host">
-        <!-- search bar -->
-        <form class="search-bar method="GET" action="{% url 'home' %}">
-            <input type="text" name="q" placeholder="Search...">
+        <!-- search-bar -->
+        <form method="get" action="{% url 'home' %}">
+            <input type="text" name="'q" placeholder="Search...">
             <button type="submit">Search</button>
         </form>
-
-        <!-- Display top hosts -->
+         <!-- Display top hosts -->
         <h3>Top Hosts</h3>
-
         {% for host in top_hosts %}
         <div>{{ host.username }} ({{ host.num_rooms }} rooms)</div>
         {% endfor %}
-
-        <!-- Display Topics -->
+        <!-- Topics -->
         <h3>Topics</h3>
-
         <a href="{% url 'home' %}"> All </a>
         {% for topic in topics %}
             <div>
@@ -26,57 +22,60 @@
             </div>
         {% endfor %}
     </div>
-    
+
+
     <div class="room-container">
-       
-        <a href="{% url 'create-room' %}">Create a Room</a> <br>
+        <button><a href="{% url 'create-room' %}">Create a Room</a></button>   <br>
         <small>There are <b> {{room_count}} </b> rooms available </small>
         {% for room in rooms %}
-        <div>
-            <span> Host @{{room.host.username}}</span>
-            <h4> <a href="{% url 'room' room.title %}">{{room.title}}</a>  </h4>
-            <h5> {{room.description}} </h5>
-            <!-- restricted to only the host -->
-            {% if request.user.is_authenticated %}
-                {% if request.user == room.host%}
-                    <a href="{% url 'update-room' room_title=room.title %}">Edit</a>
-                    <a href="{% url 'delete-room' room_title=room.title %}">Delete</a>
+            <div>
+                <span>Host @{{room.host.username}}</span>
+                <h4> <a href="{% url 'room' pk=room.pk %}">{{room.title}}</a>  </h4>
+                <h5> {{room.description}} </h5>
+                <!-- restriction to login users only -->
+                {% if request.user.is_authenticated %}
+                    {% if request.user == room.host %}
+                        <a href="{% url 'update-room' pk=room.pk %}">Edit</a>
+                        <a href="{% url 'delete-room' pk=room.pk %}">Delete</a>
+                    {% endif %}
                 {% endif %}
-            {% endif %}
-            <small>{{ room.topic.name }}</small>
-            
+                <small>{{ room.topic.name }}</small>
+            </div>
         {% empty %}
-        <p>
-            No rooms available
-        </p>
-        </div>
-        
-        {% endfor %}
-    </div> 
+            <p>No rooms available. <a href="{% url 'create-room' %}"><strong>Create</strong></a> one</p>
 
-    <div class="tasks-chats">
-        <div class="recent-activities">
-            <h3>Recent Activities</h3>
-        </div>
-    
-        <div class="tasks-container">
+        {% endfor %}
+    </div>
+
+    <div class="tasks-recent-activities">
+            <div class="recent-activities">
+                <h3>Recent Activities</h3>
+                {% for chat in room_chats %}
+                    <div>
+                        <p>@{{ chat.sender.username }}  {{chat.sent_on | timesince}} ago</p>
+                        <small>replied to "{{chat.room}}"</small>
+                        <p> {{chat.body}} </p>
+                    </div>
+                {% empty %}
+                    <p>Pssst! It's quiet here!</p>
+
+                {% endfor %}
+
+            </div>
+        <div class="tasks">
             <h3> <a href="{% url 'tasks' %}">Tasks</a></h3>
             {% if user.is_authenticated %}
-                {% for task in tasks %}
-                    <div class="tasks">
-                        {{task.title}}
-                        {{task.due_date}}
-                    </div>
+                {% for task in tasks%}
+                <div>
+                    {{task.title}}
+                    Due: {{task.due_date}}
+                </div>
                 {% endfor %}
-            {% else %}
-                <p>Please <a href="{% url 'login' %}">log in</a> to view your tasks.</p>
             {% endif %}
         </div>
-    
-        <div class="buddy-chats">
-            <h3>Buddy Chats</h3>
-        </div>
     </div>
-    
+
+
 </div>
+
 {% endblock %}

@@ -3,28 +3,14 @@
 <!-- {% include 'messages.html' %} -->
 
 {% block content %}
-    <h1>Register</h1>
+    <div class="account-auth">
+        <h1>Register</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{form.as_p}}
 
-    <form method="post">
-        {% csrf_token %}
-        {{form.as_p}}
-
-        <button type="submit">Regester</button>
-    </form>
-
-    {% if form.errors %}
-    <div class="alert alert-danger" role="alert">
-        <strong>Error:</strong> Please correct the errors below.
-        <ul>
-            {% for field, errors in form.errors.items %}
-            {% for error in errors %}
-            <li>{{ error }}</li>
-            {% endfor %}
-            {% endfor %}
-        </ul>
+            <button type="submit">Regester</button>
+        </form>
+        <p>Have an account? <a href="{% url 'login' %}">Login</a> </p>   
     </div>
-    {% endif %}
-
-    <p>Have an account? <a href="{% url 'login' %}">Login</a> </p>
-
 {% endblock %}

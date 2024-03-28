@@ -10,15 +10,86 @@ html {
 }
 
 body {
+    color: white;
     margin: 10px;
     padding: 20px;
+    background-color: #2d2d39;
+    min-height: 100vh;
 }
+
+/* Universal styling */
 
 a {
     cursor: pointer;
     text-decoration: none;
+    color: white;
 }
 
+form {
+    
+}
+
+button {
+    background-color: purple;
+    color: white;
+    cursor: pointer;
+    /* background-color: transparent; */
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    transition: all ease-in-out 0.3s;
+    padding: 1rem 2rem;
+    border-radius: 5px;
+    box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.15);
+    font-weight: 500;
+}
+
+button:hover {
+    background-color: #4c3954;
+    opacity: 0.9;
+  }
+
+  /* Accounts styling */
+  .account-auth {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #3e4157;
+  }
+
+  form {
+    border-radius: 5%;
+    padding: 2rem;
+    margin: 0 auto;
+    max-width: fit-content;
+    font-weight: 700;
+    box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.15);
+  }
+
+  form input,
+  form select,
+  form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    padding: 1em;
+    box-sizing: border-box;
+    border: none;
+    box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.15);
+  }
+
+  .auth-title {
+    margin-bottom: 15px;
+  }
+
+  .auth-par {
+    margin-top: 20px;;
+  }
+/* Navigation bar */
 nav {
     color: white;
 }
@@ -56,8 +127,30 @@ li {
     /* margin: 10px; */
 }
 
-/* Home view */
-.home-view {
+/* .content-container {
+    background-color: #3e4157;
+    
+} */
+
+.home-container {
+    background-color: #3e4157;
     display: grid;
-    grid-template-columns: 1fr 3fr;
+    grid-template-columns: 1fr 3fr 1fr;
+    margin: 20px;
+    padding: 20px;
+    /* width: 100%; */
+}
+
+.topics-host {
+
+
+}
+
+.room-container {
+    
+}
+
+
+.tasks-recent-activities {
+    
 }
