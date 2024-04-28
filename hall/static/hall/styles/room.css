@@ -1,0 +1,81 @@
+.room-detail-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    padding: 10px;
+    margin: 20px;
+}
+
+.side-by-side {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.room-description {
+    font-size: 13px;
+    font-weight: 300;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.chat-room,
+.room-messages {
+    background: var(--color-bg-sec);
+    max-height: fit-content;
+    border-radius: 5px;
+    margin: 20px;
+}
+
+.chat-content {
+    margin: 1.5rem;
+    padding: 1.5rem;
+    box-shadow: var(--box-shadow);
+    border-radius: 5px;
+    margin: 20px;
+}
+
+.delete-btn {
+    display: inline;
+    margin-left: 90%;
+}
+
+.room-messages button {
+    margin-top: 15px;
+    left: 100px;
+}
+
+.message-form form {
+    margin: 10px;
+}
+
+.message-form form textarea {
+    background-color: var(--color-bg-main);
+    padding: 20px;
+    color: var(--color-text);
+    width: 100%;
+    border-radius: 5px;
+    box-shadow: var(--box-shadow);
+}
+
+.message-form form button {
+    margin-top: 15px;
+    margin-left: 90%;
+}
+
+
+/* Room Members */
+
+.members {
+    background: var(--color-bg-sec);
+    border-radius: 5px;
+    box-shadow: var(--box-shadow);
+    max-height: fit-content;
+    margin: 20px;
+}
+
+.member-list {
+    margin: 1.5rem;
+    padding: 1.5rem;
+    border-radius: 5px;
+    margin: 10px;
+}

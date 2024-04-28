@@ -1,0 +1,98 @@
+{% extends 'hall/index.html' %}
+
+{% load static %}
+
+{% block css %} 
+    <link rel="stylesheet" href="{% static  'accounts/styles/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="user-profile">
+        <div class="topics">
+            <div class="title">
+                <h3>{{user.username}}s Topics</h3>
+            </div>
+            
+            <div class="topic-display">
+                <a href="{% url 'home' %}"> All </a>
+                {% for topic in topics %}
+                    <div>
+                        <a href="{% url 'topic-detail' slug=topic.name|lower %}?q={{topic.name}}"> {{topic.name}} </a>
+                    </div>
+                {% endfor %}
+            </div>
+            
+        </div> 
+        <div class="profile">
+            <!-- Users about -->
+
+            <!-- users room -->
+            <secction class="rooms">
+                <p style="margin-bottom: 7px;">Rooms <span>{{user.first_name}}</span> is part of</p>
+                <div class="room-card">
+                    {% for room in user_rooms %}
+                    <div class="room-details">
+                        <h3><a href="{% url 'room' slug=room.slug %}">{{room.title}}</a></h3>
+                        <h5>{{room.description | slice:'0:150'}}</h5><br>
+                        <a href="{% url 'topic-detail' slug=room.topic.name|lower %}?q={{room.topic.name}}" class="link"><small>{{ room.topic.name }}</small></a>
+                    </div>
+                    {% empty %}
+                        <p>{{user.first_name}} is not part of a room.</p>
+                    {% endfor %}
+                    <div class="pagination">
+                        <span class="step-links">
+                            {% if page_obj.has_previous %}
+                                <a href="?page=1">&laquo; first</a>
+                                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                            {% endif %}
+                    
+                            {% if page_obj.has_next %}
+                                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </secction>
+        </div>
+        <div class="tasks-recent-activities">
+            <!-- recent activities -->
+            <div class="recent-activities">
+                <div class="title">
+                    <h3>Recent Activities</h3>
+                </div>
+                {% for chat in recent_activities %}
+                    <div class="activities-content">
+                        <p>@  <a href="{% url 'profile' chat.sender.username %}"></a>{{ chat.sender.username }}</p>
+                        <small>{{chat.sent_on | timesince}} ago</small>
+    
+                        <small>replied to  <a href="{% url 'room' slug=chat.room.slug %}">"{{chat.room}}"</a></small>
+                        <div class="message">
+                            <p> {{chat.body}} </p>
+                        </div>         
+                    </div>
+                {% empty %}
+                    <div class="empty">
+                        <p>Pssst! It's quiet here!</p>
+                    </div>
+                {% endfor %}
+            </div>
+            <!-- notes -->
+            <section class="notes-container-profile">
+                <div class="title">
+                    <h3> <a href="{% url 'notes' %}">Notes</a></h3>
+                </div>
+                {% for note in notes %}
+                    <div class="notes-content-profile">
+                        <h4> <a href="{% url 'note' slug=note.slug %}">{{note.title}}</a></h4>
+                        <small>Last update: {{note.updated_at | date:'F j, Y'}}</small>
+                    </div>
+                {% empty %}
+                    <div class="empty">
+                        <p>{{user.username}} has no public notes</p>
+                    </div>
+                {% endfor %}
+            </section>
+        </div>
+    </div>
+{% endblock %}

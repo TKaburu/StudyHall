@@ -1,0 +1,47 @@
+{% extends 'hall/index.html' %}
+
+{% block content %}
+
+<div class="room-card">
+    <div class="btn-search">
+        <button><a href="{% url 'create-room' %}">Add a new Room</a></button>
+            <!-- search bar -->
+        <form class="search-bar method="GET" action="{% url 'topic-detail' slug=topic_name.slug %}">
+            <input type="text" name="q" placeholder="Search...">
+            <button type="submit">Search</button>
+        </form>
+
+    </div>
+    <div class="title" style="text-align: center;">
+        <h2>{{topic_name}}</h2>
+    </div>
+    <div class="topic-list">
+        {% for room in rooms %}
+            <div class="topic-container">
+                <div class="room-details">
+                    Host <a href="{% url 'profile' room.host.username %}" class="link">@{{room.host.username}}</a>
+                    <h3><a href="{% url 'room' slug=room.slug %}">{{room.title}}</a></h3>
+                    <h5>{{room.description | slice:'0:150'}}</h5><br>
+                    <div class="del-back">
+                        {% if request.user.is_authenticated %}
+                            {% if request.user == room.host or request.user.is_superuser %} 
+                                <button><a href="{% url 'update-room' slug=room.slug %}">Edit</a></button>
+                                <button><a href="{% url 'delete-room' slug=room.slug %}">Delete</a></button>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+        {% empty %}
+            <div class="empty">
+                <p>No rooms available. <a href="{% url 'create-room' %}" class="link"><strong>Create</strong></a> one</p>
+            </div>  
+        {% endfor %}
+    </div>
+    <div style="text-align: center;">
+        <button style="display: inline-block;"><a href="{{ request.META.HTTP_REFERER }}">Go back</a></button>
+    </div>
+</div>
+
+{% endblock %}

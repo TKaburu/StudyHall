@@ -1,0 +1,28 @@
+{% extends 'hall/index.html' %}
+
+{% load static %}
+
+{% block css %} 
+    <link rel="stylesheet" href="{% static  'accounts/styles/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="account-auth">
+
+        <form method="post">
+            <div class="django-messages">
+                {% if messages %}
+                    {% for message in messages %}
+                        <p>{{ message.tags }}! {{ message }}</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <h1 class="auth-title">Login</h1>
+            {% csrf_token %}
+            {{form.as_p}}
+
+            <button type="submit">Login</button>
+            <p class="auth-par">Don't have an account? <a href="{% url 'register' %}">Register</a> </p>
+        </form>
+    </div>
+{% endblock %}

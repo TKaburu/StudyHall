@@ -1,0 +1,17 @@
+{% extends 'hall/index.html' %}
+
+{% block content %}
+
+<div class="create-update-form">
+    <form method="post">
+        <h2 class="create-update-title">Updating "{{notes}}" </h2>
+        {% csrf_token %}
+        {{ form.media }}
+        {{form.as_p}}
+        <br>
+        <button type="submit">Update Note</button>
+    </form>
+
+</div>
+
+{% endblock %}

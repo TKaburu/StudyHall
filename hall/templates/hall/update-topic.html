@@ -1,0 +1,18 @@
+{% extends 'hall/index.html' %}
+
+{% block content %}
+
+<div class="create-update-form">
+        <form method="post">
+            <h2 class="create-update-title">You are Updating the topic "{{topic.name}}" </h2>
+            {% csrf_token %}
+            {{form.as_p}}
+            <br>
+            <div class="del-back">
+                <button><a href="{{ request.META.HTTP_REFERER }}">Cancel</a></button>
+                <button type="submit">Update</button>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

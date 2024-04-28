@@ -1,0 +1,47 @@
+{% extends 'hall/index.html' %}
+
+{% block content %}
+    <div>
+        <div class="btn-search">
+            <button><a href="{% url 'create-topic' %}">Add a new Topic</a></button>
+                <!-- search bar -->
+            <form class="search-bar method="GET" action="{% url 'topics' %}">
+                <input type="text" name="q" placeholder="Search...">
+                <button type="submit">Search</button>
+            </form>
+    
+        </div>
+        <div class="title" style="text-align: center;">
+            <h2>Topics</h2>
+        </div>
+        <div class="topic-list-container">
+            <div class="topic-list">
+            
+                {% for topic in topics %}
+                    <div class="topic-container">
+                        <div class="topics-display">        
+                            <h3><a href="{% url 'topic-detail' slug=topic.name|lower %}?q={{topic.name}}">{{topic.name}}</a></h3> 
+                            <small>{{ topic.num_rooms }} room{{ topic.num_rooms | pluralize:"s" }} available</small> 
+                            <p><small>{{topic.created_on | date:'F j, Y'}}</small></p> 
+                            <div class="del-back">
+                                {% if request.user.is_authenticated %}
+                                    {% if request.user == room.host or request.user.is_superuser %} 
+                                        <button><a href="{% url 'update-topic' slug=topic.slug %}">Edit</a></button>
+                                        <!-- Users wount be able to delete a topic because different rooms can use the same topic -->
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+            
+                {% empty %}
+                    <p>You have no topics. <a href="{% url 'create-topic' %}"> Add </a> some.</p>
+                {% endfor %}
+            </div>
+        </div>
+        <div style="text-align: center;">
+            <button style="display: inline-block;"><a href="{{ request.META.HTTP_REFERER }}">Go back</a></button>
+        </div>
+    </div>
+    
+{% endblock %}

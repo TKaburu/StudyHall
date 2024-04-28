@@ -1,0 +1,20 @@
+{% extends 'hall/index.html' %}
+
+{% load static %}
+
+{% block css %} 
+    <link rel="stylesheet" href="{% static  'notes/styles/notes.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="create-update-form">
+        <form method="post">
+            {% csrf_token %}
+            <h2 class="create-update-title">Add a New Note</h2>
+            {{ form.media }}
+            {{form.as_p}}
+            <br>
+            <button type="submit">Create Note</button>
+        </form>
+    </div>
+{% endblock %}

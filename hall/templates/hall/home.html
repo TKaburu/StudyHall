@@ -1,0 +1,167 @@
+{% extends 'hall/index.html' %}
+
+{% load static %}
+
+{% block css %} 
+    <link rel="stylesheet" href="{% static  'hall/styles/home.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="django-messages">
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message.tags }}! {{ message }}</p>
+        {% endfor %}
+    {% endif %}
+</div>
+<div class="home-container">
+    <div class="topics-host">
+        <!-- search-bar -->
+        <div class="search-bar">
+            <form method="get" action="{% url 'home' %}">
+                <input type="text" name="q" placeholder="Search room...">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+        
+         <!-- Display top hosts -->
+        <div class="hosts">
+            <div class="title">
+                <h3>Top Hosts</h3>
+            </div>
+            <div class="host-dispay">
+                {% for host in top_hosts %}
+                    <div class="host-content">
+                        <h4><a href="{% url 'profile' host.username %}">{{ host.username }}</a> {{ host.num_rooms }} room{{ host.num_rooms|pluralize:"s" }}</h4>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- Topics -->
+        <div class="topics">
+            <div class="title">
+                <h3><a href="{% url 'topics' %}">Topics</a></h3>
+            </div>
+            
+            <div class="topic-display">
+                <a href="{% url 'topics' %}"> All </a>
+                {% for topic in topics %}
+                    <div>
+                        <a href="{% url 'topic-detail' slug=topic.name|lower %}?q={{topic.name}}"> {{topic.name}} </a>
+                    </div>
+                {% endfor %}
+            </div>            
+        </div>
+    </div>
+    <div class="room-container">
+        <div class="room-count">
+            <small>There are <b> <a href="{% url 'topics' %}" class="link">{{room_count}}</a></b> rooms available </small>
+            <button><a href="{% url 'create-room' %}">Create a Room</a></button>   <br>
+        </div>
+        <div class="room-card">
+            {% for room in rooms %}
+            <div class="room-details">
+                {% if room.host.username %}
+                    Host <a href="{% url 'profile' room.host.username %}" class="link">@{{ room.host.username }}</a>
+                {% else %}
+                    Host: N/A
+                {% endif %}
+                <h3><a href="{% url 'room' slug=room.slug %}">{{room.name}}</a></h3>
+                <h5>{{room.description | slice:'0:150'}}</h5><br>
+                <a class="link" href="{% url 'topic-detail' slug=room.topic.name|lower %}?q={{room.topic.name}}"><small>{{ room.topic.name }}</small></a>
+            </div>
+            {% empty %}
+                <p>No rooms available. <a href="{% url 'create-room' %}"><strong>Create</strong></a> one</p>
+
+            {% endfor %}
+            <div class="pagination">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1">&laquo; first</a>
+                        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                    {% endif %}
+            
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>        
+    </div>
+    <div class="tasks-recent-activities">
+            <!-- tasks -->
+        <div class="home-tasks">
+            <div class="title">
+                <h3><a href="{% url 'tasks' %}">Tasks</a></h3>
+            </div>
+            {% if user.is_authenticated %}
+                {% for task in tasks %}
+                    <div class="tasks-content">
+                        <h4><a href="{% url 'task' slug=task.slug %}">{{task.title}}</a></h4>
+                        <small>Due: {{task.due_date}}</small>
+                    </div>
+                {% empty %}
+                    <div class="empty">
+                        <p>You have no tasks yet. <a class="link" href="{% url 'create-task' %}">Add</a> some</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty">
+                    <p>Please <a class="link" href="{% url 'login' %}">login</a> to see you tasks.</p>
+                </div>
+            {% endif %}
+        </div>
+            <!-- recent activities -->
+        <div class="recent-activities">
+                <div class="title">
+                    <h3>Recent Activities</h3>
+                </div>
+                {% for chat in room_chats %}
+                    <div class="activities-content">
+                        <p> <a href="{% url 'profile' chat.sender.username %}">@{{ chat.sender.username }}</a></p>
+                        <small>{{chat.sent_on | timesince}} ago</small>
+
+                        <small>replied to  <a href="{% url 'room' slug=chat.room.slug %}">"{{chat.room}}"</a></small>
+                        <div class="message">
+                            <p> {{chat.body}} </p>
+                        </div>
+                        
+                    </div>
+                {% empty %}
+                    <div class="empty">
+                        <p>Pssst! It's quiet here!</p>
+                    </div>
+                {% endfor %}
+        </div>
+
+            <!-- notes -->
+        <div class="home-notes">
+            <div class="title">
+                <h3> <a href="{% url 'notes' %}">Notes</a></h3>
+            </div>
+            {% if user.is_authenticated %}
+                {% for note in notes %}
+                    <div class="notes-content">
+                        <h4><a href="{% url 'note' slug=note.slug %}">{{note.title}}</a></h4>
+                        <small>Last update: {{note.updated_at | date:'F j, Y'}}</small>
+                        <br>
+                        <button><a href="{% url 'update-note' slug=note.slug %}">Update</a></button>
+                    </div>
+                {% empty %}
+                    <div class="empty">
+                        <p>You have no notes yet. <a class="link" href="{% url 'create-note' %}">Add</a> some</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty">
+                    <p>Please <a class="link" href="{% url 'login' %}">login</a> to see you notes.</p>
+                </div>
+            {% endif %}
+           
+        </div>
+
+        
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'hall/index.html' %}
+
+{% block content %}
+    <div class="task-detail">
+        <div class="task-content">
+            <div class="title">
+                <h1>{{tasks.title}}</h1>
+                <p style="text-align: center;"><small>Due Date: {{tasks.due_date}}</small></p>
+            </div>
+            <p style="margin-top: 10px;">{{tasks.description}}</p> <br>
+            <div class="del-back">
+                <button><a href="{{ request.META.HTTP_REFERER }}">Go back</a></button>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

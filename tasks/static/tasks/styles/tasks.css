@@ -1,0 +1,81 @@
+
+.tasks {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.task-count {
+    font-size: 12px;
+    position: relative;
+    left: 5%;
+}
+
+.task-count span {
+    color: var(--color-link);
+}
+
+.task-filter {
+    /* text-align: center; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+
+}
+
+.task-display p {
+    font-size: 14px;
+    /* text-align: center; */
+}
+
+.empty-task-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50%; /* Set the height of the container to 100% of the viewport height */
+}
+
+.empty-task {
+    text-align: center;
+}
+
+.del-complete {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* detail tasks */
+
+.task-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: var(--color-bg-sec);
+}
+
+.task-content {
+    border-radius: 5%;
+    padding: 2rem;
+    margin: 0 auto;
+    max-width: 50%;
+    font-weight: 700;
+    box-shadow: var(--box-shadow)
+}
+
+.task-content h1 {
+    text-align: center;
+}
+
+.task-content button {
+    position: relative;
+    left: 40%;
+}
+
+.due-date{
+    font-size: 12px;
+}

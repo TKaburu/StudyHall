@@ -1,0 +1,119 @@
+  /* Accounts styling */
+
+  /* Login */
+  .account-auth,
+  .register-auth {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: var(--color-bg-sec);
+  }
+  
+  .account-auth form {
+      border-radius: 5%;
+      padding: 2rem;
+      margin: 0 auto;
+      max-width: fit-content;
+      font-weight: 700;
+      box-shadow: var(--box-shadow);
+  } 
+  
+  .account-auth form input,
+  .account-auth form select,
+  .account-auth form textarea,
+  .account-auth form label[type="text"] {
+      width: 100%;
+      padding: 5px;
+      margin: 10px;
+      padding: 7px;
+      background-color: var(--color-bg-main);
+      box-sizing: border-box;
+      border: none;
+      border-radius: 5px;
+      border-bottom: 20px;
+      box-shadow: var(--box-shadow);
+      color: var(--color-text);
+      font-size: 16px;
+  } 
+  
+  
+  .auth-title {
+      margin-bottom: 15px;
+      color: var(--color-link);
+      text-align: center;
+  }
+  
+  .auth-par {
+      margin-top: 20px;
+      font-size: 14px;
+      text-align: center;
+  }
+  
+  .auth-par a 
+   {
+      color: var(--color-link);
+      margin-left: 5px;
+  }
+  
+  /* register */
+  
+  .register-auth form {
+      border-radius: 5%;
+      padding: 2rem;
+      margin: 0 auto;
+      max-width: fit-content;
+      font-weight: 700;
+      box-shadow: var(--box-shadow);
+  } 
+  
+  .register-auth form input,
+  .register-auth form select,
+  .register-auth form textarea,
+  .register-auth form label[type="text"] {
+      width: 100%;
+      padding: 5px;
+      margin-bottom: 10px;
+      margin: 10px;
+      padding: 7px;
+      background-color: var(--color-bg-main);
+      box-sizing: border-box;
+      border: none;
+      border-radius: 5px;
+      box-shadow: var(--box-shadow);
+      color: var(--color-text);
+      font-size: 16px;
+  } 
+  
+  .register-title {
+      margin-bottom: 15px;
+      color: var(--color-link);
+      text-align: center;
+  }
+  
+  .register-par {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 14px;
+  }
+  
+  .register-par a 
+   {
+      color: var(--color-link);
+      border-bottom: 15px;
+      margin-left: 5px;
+      
+  }
+  
+  /* Profiles */
+  
+  .user-profile {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      gap: 20px;
+  }
+  
+  .rooms span {
+      color: var(--color-link);
+  }

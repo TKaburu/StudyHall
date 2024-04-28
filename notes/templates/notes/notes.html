@@ -1,0 +1,52 @@
+{% extends 'hall/index.html' %}
+
+{% load static %}
+
+{% block css %} 
+    <link rel="stylesheet" href="{% static  'notes/styles/notes.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div>
+        <div class="btn-search">
+            <button><a href="{% url 'create-note' %}">Add a Note</a></button>
+        <!-- search bar -->
+            <form class="search-bar method="GET" action="{% url 'notes' %}">
+                <input type="text" name="q" placeholder="Search...">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+        <div class="title">
+            <h2>Notes</h2>
+        </div>
+        <div class="notes">
+            {% for note in notes %}
+            <div class="note-container">
+                <div class="note-display"> 
+                    <h3><a href="{% url 'note'  slug=note.slug %}">{{note.title}}</a></h3> 
+                    <!-- <p>{{note.content.html | safe | slice:':100'}}</p> -->
+                    <div class="date-topic">
+                        <p><small>Updated on: {{note.updated_at | date:'F j, Y'}}</small></p>
+                        <small>{{note.topic}}</small>
+                    </div>
+                    <div class="status">
+                        <small>Status: {{ note.get_status_display }}</small>
+                    </div>
+                     
+                    <div class="del-back">
+                        <button><a href="{% url 'delete-note' slug=note.slug %}">Delete</a></button>
+                        <button><a href="{% url 'update-note' slug=note.slug %}">Update</a></button>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+                <div class="empty">
+                    <p>You have no notes. <a href="{% url 'create-note' %}" class="link">Add</a> one</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        
+    </div>
+
+{% endblock %}

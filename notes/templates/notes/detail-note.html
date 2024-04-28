@@ -1,0 +1,19 @@
+{% extends 'hall/index.html' %}
+
+{% block content %}
+
+    <section class="note-container">
+        <div class="note-detais-display">
+            <div class="title">
+                <h3>{{notes.title}}</h3>
+            </div>
+            <p>{{notes.content.html | safe}}</p>
+            <div class="btn" style="text-align: center;">
+                <button><a href="{{ request.META.HTTP_REFERER }}">Go back</a></button>
+            </div>
+            
+        </div>
+    </section>
+
+
+{% endblock %}

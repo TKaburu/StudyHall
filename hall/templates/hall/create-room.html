@@ -1,0 +1,18 @@
+{% extends 'hall/index.html' %}
+
+{% block content %}
+
+    <div class="create-update-form">
+        <form method="post">
+            {% csrf_token %}
+            <h2 class="create-update-title">Create a room</h2>
+            {{ form.as_p }}
+            <br>
+            <div class="del-back">
+                <button type="submit">Create Room</button>
+                <button><a href="{{ request.META.HTTP_REFERER }}">Cancel</a></button>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

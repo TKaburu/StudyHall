@@ -1,0 +1,42 @@
+{% extends 'hall/index.html' %}
+
+{% load static %}
+
+{% block css %} 
+    <link rel="stylesheet" href="{% static  'accounts/styles/auth.css' %}">
+{% endblock %}
+
+<!-- {% include 'messages.html' %} -->
+
+{% block content %}
+    <div class="register-auth">
+        <div class="django-messages">
+            {% if messages %}
+                {% for message in messages %}
+                    <p>{{ message.tags }}! {{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <form method="post">
+            <h1 class="register-title">Register</h1>
+            {% csrf_token %}
+            <label>{{form.first_name.label}}</label>
+            {{form.first_name}} <br>
+
+            <label>{{form.last_name.label}}</label>
+            {{form.last_name}} <br>
+
+            <label>{{form.username.label}}</label>
+            {{form.username}} <br>
+
+            <label">{{form.password1.label}}</label>
+            {{form.password1}} <br>
+
+            <label>{{form.password2.label}}</label>
+            {{form.password2}} <br>
+
+            <button type="submit">Regester</button>
+        </form>
+        <p class="register-par">Already have an account? <a href="{% url 'login' %}"> Login</a> </p>   
+    </div>
+{% endblock %}

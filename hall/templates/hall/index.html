@@ -1,0 +1,63 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> {% block title %} {% endblock %} Study Hall</title>
+    <!-- css link -->
+    <link rel="stylesheet" href="{% static 'hall/styles/main.css' %}">
+    {% block css %} {% endblock %}
+    <link rel="icon" type="image/x-icon" href="{% static 'hall/images/favcon.png' %}">
+    <!-- Font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Poppin font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    
+    <section class="nav-container">
+        <nav class="nav-bar">
+            <div class="logo">
+                <a href="{% url 'home' %}">
+                    <img src="{% static 'hall/images/logo.png' %}" alt="logo" style="width: 200px; height: 200px;">
+                </a>
+               
+            </div>
+            
+            <ul class="home-links">
+                <a href="#">Home</a>
+                <a href="#">About</a>
+                <a href="#features">Features</a>
+                <a href="#contact">Contact</a>
+            </ul>
+            <div class="user-auth">
+                <i class="fa-regular fa-user"></i>
+                <div class="user">
+                    {% if request.user.is_authenticated %}
+                    <div class="logout">
+                        <!-- <p><a href="{% url 'update-user' %}">Hello {{request.user.username}}</a></p> -->
+                        <button><a href="{% url 'logout' %}">Logout</a></button>
+                    </div>
+                    
+                    {% else %}
+                    <button><a href="{% url 'login' %}">Login</a></button>
+                 {% endif %}
+                </div>
+                
+            </div>
+                
+            </div>
+        </nav>
+    </section>
+    {% block content %} 
+    
+    {% endblock %}
+</body>
+</html>
