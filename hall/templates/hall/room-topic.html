@@ -20,13 +20,13 @@
             <div class="topic-container">
                 <div class="room-details">
                     Host <a href="{% url 'profile' room.host.username %}" class="link">@{{room.host.username}}</a>
-                    <h3><a href="{% url 'room' slug=room.slug %}">{{room.title}}</a></h3>
+                    <h3><a href="{% url 'room' slug=room.slug %}">{{room.name}}</a></h3>
                     <h5>{{room.description | slice:'0:150'}}</h5><br>
                     <div class="del-back">
                         {% if request.user.is_authenticated %}
-                            {% if request.user == room.host or request.user.is_superuser %} 
-                                <button><a href="{% url 'update-room' slug=room.slug %}">Edit</a></button>
+                            {% if request.user == room.host or request.user.is_superuser %}
                                 <button><a href="{% url 'delete-room' slug=room.slug %}">Delete</a></button>
+                                <button><a href="{% url 'update-room' slug=room.slug %}">Edit</a></button>
                             {% endif %}
                         {% endif %}
                     </div>

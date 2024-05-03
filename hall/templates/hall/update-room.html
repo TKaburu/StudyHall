@@ -3,13 +3,13 @@
 {% block content %}
     <div class="create-update-form">
         <form method="post">
-            <h2 class="create-update-title">You are Updating "{{room.title}}" </h2>
+            <h2 class="create-update-title">You are Updating "{{room.name}}" </h2>
             {% csrf_token %}
             {{form.as_p}}
             <br>
             <div class="del-back">
-                <button type="submit">Update</button>
                 <button><a href="{{ request.META.HTTP_REFERER }}">Cancel</a></button>
+                <button type="submit">Update</button>
             </div>
         </form>
     </div>

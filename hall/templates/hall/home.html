@@ -32,7 +32,8 @@
             <div class="host-dispay">
                 {% for host in top_hosts %}
                     <div class="host-content">
-                        <h4><a href="{% url 'profile' host.username %}">{{ host.username }}</a> {{ host.num_rooms }} room{{ host.num_rooms|pluralize:"s" }}</h4>
+                        <h4><a class="link" href="{% url 'profile' host.username %}">{{ host.username }}</a></h4>
+                        <h5>{{ host.num_rooms }} room{{ host.num_rooms|pluralize:"s" }}</h5>
                     </div>
                 {% endfor %}
             </div>
@@ -68,7 +69,13 @@
                 {% endif %}
                 <h3><a href="{% url 'room' slug=room.slug %}">{{room.name}}</a></h3>
                 <h5>{{room.description | slice:'0:150'}}</h5><br>
-                <a class="link" href="{% url 'topic-detail' slug=room.topic.name|lower %}?q={{room.topic.name}}"><small>{{ room.topic.name }}</small></a>
+                <div class="members-topic">
+                    <div class="members-count">
+                        <i class="fa-solid fa-users link"></i>
+                        <small>{{ room.members.count }} </small>
+                    </div>
+                    <a class="topic" href="{% url 'topic-detail' slug=room.topic.name|lower %}?q={{room.topic.name}}"><small>{{ room.topic.name }}</small></a>
+                </div>
             </div>
             {% empty %}
                 <p>No rooms available. <a href="{% url 'create-room' %}"><strong>Create</strong></a> one</p>

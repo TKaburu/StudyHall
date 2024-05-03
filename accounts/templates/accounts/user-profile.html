@@ -28,11 +28,11 @@
 
             <!-- users room -->
             <secction class="rooms">
-                <p style="margin-bottom: 7px;">Rooms <span>{{user.first_name}}</span> is part of</p>
+                <p style="margin-bottom: 7px;">Rooms <span>{{user.username}}</span> is part of</p>
                 <div class="room-card">
                     {% for room in user_rooms %}
                     <div class="room-details">
-                        <h3><a href="{% url 'room' slug=room.slug %}">{{room.title}}</a></h3>
+                        <h3><a href="{% url 'room' slug=room.slug %}">{{room.name}}</a></h3>
                         <h5>{{room.description | slice:'0:150'}}</h5><br>
                         <a href="{% url 'topic-detail' slug=room.topic.name|lower %}?q={{room.topic.name}}" class="link"><small>{{ room.topic.name }}</small></a>
                     </div>
