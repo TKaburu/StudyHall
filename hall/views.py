@@ -45,11 +45,12 @@ class HomeView(ListView):
         """
         context = super().get_context_data(**kwargs)
         context['room_count'] = Room.objects.count() # Calculate how many rooms ther are 
-        context['topics'] = Topic.objects.all() # get all the topics
+        context['topics'] = Topic.objects.all().order_by('name') # get all the topics alphabetically
         context['room_chats'] = RoomMessage.objects.all().order_by('-sent_on')[:4] # only shows 4 latest activities
 
         # calculate the top 5 hosts by no of rooms created
         top_hosts = User.objects.annotate(num_rooms=Count('room')).filter(num_rooms__gt=0).order_by('-num_rooms')[:5]
+        # context['members'] = rooms.members.all()
         context['top_hosts'] = top_hosts
         if self.request.user.is_authenticated:
             context['tasks'] = Tasks.objects.filter(
@@ -213,7 +214,7 @@ class DeleteMessage(LoginRequiredMixin, DeleteView):
 
 class TopicView(ListView):
     """
-    This clas list out all rooms of a specific topic
+    This class list out all rooms of a specific topic
     """
     model = Topic
     template_name = "hall/topic.html"
@@ -263,8 +264,11 @@ class TopicDetail(ListView):
         return Room.objects.none()
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        topic = Topic.objects.get(slug=self.kwargs.get('slug'))  # Retrieve the topic object
+        # rooms = Room.objects.filter(topic=topic)
+        topic_slug = self.kwargs.get('slug')
+        topic = Topic.objects.get(slug=topic_slug)  # Retrieve the topic object
         context['topic_name'] = topic
+        # context['rooms'] = rooms
         return context
 
 class CreateTopic(LoginRequiredMixin, CreateView):
