@@ -87,19 +87,19 @@ class UserProfile(DetailView):
         """
         context = super(UserProfile, self).get_context_data(**kwargs)
         user = self.object 
-        # user_rooms = Room.objects.filter(Q(members=user) | Q(host=user))
-        # topics = Topics.objects.filter(room__in=user_rooms).distinct() # gets the topics that the user is linked to
+        user_rooms = Room.objects.filter(Q(members=user) | Q(host=user))
+        topics = Topic.objects.filter(room__in=user_rooms).distinct().order_by('name') # gets the topics that the user is linked to
         notes = Notes.objects.filter(status='public') # gets users notes that are public
 
-        # context['user_rooms'] = user_rooms
-        # context['topics'] = topics
+        context['user_rooms'] = user_rooms
+        context['topics'] = topics
         context['notes'] = notes
 
-        # recent_activities = RoomMessage.objects.filter(
-        #     Q(room__in=user_rooms) & Q(sent_on__gte=timezone.now() - timezone.timedelta(days=7))
-        # ).order_by('-sent_on')[:5]  # Get the room user is in and 5 most recent activities
+        recent_activities = RoomMessage.objects.filter(
+            Q(room__in=user_rooms) & Q(sent_on__gte=timezone.now() - timezone.timedelta(days=7))
+        ).order_by('-sent_on')[:5]  # Get the room user is in and 5 most recent activities
 
-        # context['recent_activities'] = recent_activities
+        context['recent_activities'] = recent_activities
 
         return context
 
