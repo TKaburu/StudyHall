@@ -5,6 +5,7 @@
     grid-template-columns: 1fr 2fr 1fr;
 }
 
+
 /* Hosts */
 
 .hosts {
@@ -12,14 +13,17 @@
     border-radius: 5px;
     box-shadow: var(--box-shadow);
     margin-bottom: 20px; 
-    padding: 10px;
+    /* padding: 10px; */
 }
 
-.host-display {
+.host-dispay {
     padding: 10px;
 }
 
 .host-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     box-shadow: var(--box-shadow);
     margin: 1.5rem;
     padding: 1.5rem;
@@ -57,6 +61,10 @@
     
 }
 
+/* .room-count button {
+    padding: 7px;
+} */
+
 .room-details {
     border-radius: 5px;
     box-shadow: var(--box-shadow);
@@ -87,6 +95,36 @@
     margin: 20px 0;
 }
 
+.members-topic {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.members-count {
+    display: flex;
+    gap: 10px;
+}
+
+.fa-solid {
+    font-size: 20px;
+}
+
+.members-count small {
+    font-size: 13px;
+}
+
+.topic {
+    background-color: var(--color-link);
+    border-radius: 5px;
+    color: var(--color-text);
+    margin: 5px;
+    padding: 0 5px;
+}
+
+.topic:hover {
+    background-color: var(--color-bg-hover);
+}
 .pagination {
     display: flex;
     justify-content: center;
